@@ -11,7 +11,7 @@ const validarJWT = async (req = request, res = response, next) => {
 
     if(!token){
 
-        res.status(401).json({
+       return  res.status(401).json({
             msg: "No hay token"
         })
     }
@@ -34,22 +34,17 @@ const validarJWT = async (req = request, res = response, next) => {
         }
 
 
-        //Verificar estado
-        if (!usuario.estado) {
-            return res.status(401).json({
-                msg: 'Token inválido, usuario inactivo'
-            })
-        }
 
         //Guardar los datos del usuario
 
         req.usuario = usuario;
+       
 
-        next()
+        
         
     } catch (error) {
         
-        res.json({
+        return res.json({
             msg:"Token no valido"
         })
     }

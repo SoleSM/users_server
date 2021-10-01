@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const {check} = require('express-validator');
-const{validarCampos}= require('../helpers/validacionCampos');
+const{validarCampos}= require('../middlewares/validacionCampos');
 const { login } = require('../controllers/auth.controllers');
 
 router.post('/login',[

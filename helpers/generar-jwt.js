@@ -10,7 +10,7 @@ const generarJWT = (uid= '') =>{
 
         //firmar token
         jwt.sign(playload, process.env.SECRETORPRIVATEKEY, {
-            expiresIn : '2h'
+            expiresIn : '1d'
         },
         
         //Si ocurre un error

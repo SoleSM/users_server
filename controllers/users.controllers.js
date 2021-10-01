@@ -52,22 +52,24 @@ ctrlUsers.rutaPost = async(req, res) =>{
 
 //Ruta para modificar usuarios
 ctrlUsers.rutaPut = async (req, res) => {
-    console.log(chalk.blue(req.body.password))
-    console.log(chalk.green(req.params.id))
+   
+    //apuntamos a la id del usuario
     const {id} = req.params;
-    console.log(id)
-    //const {password,telefono, username, , role} = req.body;
-    const {password,telefono, username, role} = req.body
-    //console.log(chalk.yellow(resto))
-    console.log(password, telefono, username, role)
+   
+    //Vienen todos los datos menos el id y password
+    const {_id,password,...resto} = req.body
+  
+    
     try {
-       /*  if(password ){
-            const salt = bcryptjs.genSaltSync(10);
-            password = bcryptjs.hashSync(password, salt)
-        } */
-        console.log(password)
-        const user = await User.findByIdAndUpdate(id, {username, password, telefono, role}, { new: true })
-        console.log('ACACACAS',user)
+
+        //Encriptacion de password
+        if(password){
+            const salt = bcryptjs.genSaltSync();
+            resto.password = bcryptjs.hashSync(password, salt) //guarda la nueva password encriptada en resto
+        } 
+     
+        const user = await User.findByIdAndUpdate(id, resto, { new: true })
+      
         res.json({
 
             msg: 'Usuario actualizado correctamente',
@@ -75,14 +77,11 @@ ctrlUsers.rutaPut = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(401).json({
-            msg: "Ocurrio un error al intentar actualizar los datos del usuario"
-        })
+        
+        console.log('error:',error)
     }
     
 
-    //PROBLEMA: guarda los datos en la BD pero no realiza las validaciones que estan antes de la rutaPut (username, password,
-    // campos vacios ni existencia de roles)
     
 }
 
@@ -90,7 +89,7 @@ ctrlUsers.rutaPut = async (req, res) => {
 
 //Ruta para eliminar usuarios
 ctrlUsers.rutaDelete = async (req, res) => {
-    const  id = req.params.id;
+    const {id} = req.params;
     
     try {
        
